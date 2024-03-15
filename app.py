@@ -96,7 +96,7 @@ if st.sidebar.button("Show Analysis"):
         encashed_minus_issued = df.amount.sum() - redemptions.total_amount.sum()
         amount_in_words = helper.convert_to_indian_currency(encashed_minus_issued)
 
-        st.markdown(f"""There is a discrepency of **Rs. {encashed_minus_issued} ({amount_in_words})** in the difference of EB encashed from EB issued. From the graph below, it looks like some data of EB issued data in April 2019 is missing, but is encashed, could someone else confirm?""")
+        st.markdown(f"""There is a discrepancy of **Rs. {encashed_minus_issued} ({amount_in_words})** in the difference of EB encashed from EB issued. From the graph below, it looks like some data of EB issued data in April 2019 is missing, but is encashed, could someone else confirm?""")
         st.markdown(f"""(Graphs not in order, check year)""")
         helper.plot_encashment(df, encashment)
         helper.plot_purchase_vs_encashment(donor_stats.total_donation, encashment_stats.total_encashed)
@@ -113,9 +113,9 @@ if st.sidebar.button("Show Analysis"):
 st.sidebar.markdown("""---""") 
 st.sidebar.markdown("""
     Support an atmanirbhar dev today -
-    * [Buy Me A Coffee](https://www.buymeacoffee.com/saandman)
-    * [PayPal](https://paypal.me/saandman)
     * UPI - sandman.zip@oksbi
+    * [PayPal](https://paypal.me/saandman)
+    * [Buy Me A Coffee](https://www.buymeacoffee.com/saandman)
 """)
 st.sidebar.markdown("""
     For enquiries - [email](mailto:sandman.email@proton.me)
