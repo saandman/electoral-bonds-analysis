@@ -67,7 +67,7 @@ if st.sidebar.button("Show Analysis"):
             st.markdown(f"##### League: {donor_stats.rating}")
             st.markdown(f"##### No. of Donations: {donor_stats.num_donations}")
             st.markdown(f"##### Total Donation: ₹{donor_stats.total_donation}")
-            st.markdown(f"##### (in words: {helper.convert_to_indian_currency(donor_stats.total_donation)})")
+            # st.markdown(f"##### (in words: {helper.convert_to_indian_currency(donor_stats.total_donation)})")
 
         with col2:
             st.markdown(f"##### Mean/Avg Donation: ₹{donor_stats.mean_donation}")
@@ -94,8 +94,9 @@ if st.sidebar.button("Show Analysis"):
     if selected_name == "All":
         helper.plot_purchase_encashed_heatmaps(df, encashment)
         encashed_minus_issued = df.amount.sum() - redemptions.total_amount.sum()
-        amount_in_words = helper.convert_to_indian_currency(encashed_minus_issued)
+        # amount_in_words = helper.convert_to_indian_currency(encashed_minus_issued)
 
+        # st.markdown(f"""There is a discrepancy of **Rs. {encashed_minus_issued} ({amount_in_words})** in the difference of EB encashed from EB issued. From the graph below, it looks like some data of EB issued data in April 2019 is missing, but is encashed, could someone else confirm?""")
         st.markdown(f"""There is a discrepancy of **Rs. {encashed_minus_issued} ({amount_in_words})** in the difference of EB encashed from EB issued. From the graph below, it looks like some data of EB issued data in April 2019 is missing, but is encashed, could someone else confirm?""")
         st.markdown(f"""(Graphs not in order, check year)""")
         helper.plot_encashment(df, encashment)
