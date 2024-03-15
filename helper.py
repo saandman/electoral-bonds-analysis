@@ -99,25 +99,29 @@ def fetch_name_list(df):
 
 def fetch_all_donation_stats(df):
     num_donations = df.shape[0]
-    num_donors = len(df['donor_name'].unique())
-    donations_denominations = df.amount.unique()
+    num_donors = df['donor_name'].nunique()
+    donations_denominations = df['amount'].unique()
     unique_donation_denominations = f"{len(donations_denominations)} - {donations_denominations}"
-    freq_donation_denominations = df['amount'].mode().iloc[0]
-    max_freq_donation_count = df['amount'].value_counts().loc[freq_donation_denominations]
+    
+    amount_counts = df['amount'].value_counts()
+    freq_donation_denominations = amount_counts.idxmax()
+    max_freq_donation_count = amount_counts.max()
+    
     mean_donation = df['amount'].mean().round(2)
     median_donation = df['amount'].median().round(2)
     total_donation = df['amount'].sum().round(2)
+    
     start_year = df['purchase_date'].dt.year.min().astype(int)
     end_year = df['purchase_date'].dt.year.max().astype(int)
 
-    Stats = namedtuple('Stats', ['num_donations', 'num_donors', 'unique_donation_denominations', 
-                                'freq_donation_denominations', 'max_freq_donation_count', 'mean_donation', 'median_donation', 
-                                'total_donation', 'start_year', 'end_year',])
-    stats_instance = Stats(num_donations=num_donations, num_donors=num_donors, unique_donation_denominations=unique_donation_denominations, 
-                           freq_donation_denominations=freq_donation_denominations, max_freq_donation_count=max_freq_donation_count, mean_donation=mean_donation,
-                           median_donation=median_donation, total_donation=total_donation, start_year=start_year, end_year=end_year)
+    DonationStats = namedtuple('DonationStats', ['num_donations', 'num_donors', 'unique_donation_denominations', 
+                                                 'freq_donation_denominations', 'max_freq_donation_count', 
+                                                 'mean_donation', 'median_donation', 'total_donation', 
+                                                 'start_year', 'end_year'])
+    stats_instance = DonationStats(num_donations, num_donors, unique_donation_denominations, 
+                                    freq_donation_denominations, max_freq_donation_count, mean_donation, 
+                                    median_donation, total_donation, start_year, end_year)
     return stats_instance
-
 
 def fetch_user_donation_stats(selected_name, df, banana):
     rating = banana.loc[banana['donor_name'] == selected_name, 'banana_rating'].values[0]
