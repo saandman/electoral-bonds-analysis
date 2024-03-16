@@ -82,6 +82,8 @@ if st.sidebar.button("Show Analysis"):
         st.markdown(f"##### Number of times Bonds Encashed: {encashment_stats.num_encashments}")
         st.markdown(f"##### Total Encashed: ₹{encashment_stats.total_encashed}")
 
+        st.write(redemptions)
+
     if selected_name == "All":
         helper.plot_purchase_encashed_heatmap(df, encashment)
         encashed_minus_issued = donor_stats.total_donation - encashment_stats.total_encashed
