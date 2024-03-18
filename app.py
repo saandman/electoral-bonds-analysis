@@ -9,6 +9,7 @@ try:
     df = helper.load_data('donations_cleaned.csv')
     df = helper.donor_preprocess(df)
     banana = helper.banana_preprocess(df)
+    encashment = helper.load_data('encashment_cleaned.csv')
 except Exception as e:
     st.error(str(e))
 
@@ -55,8 +56,8 @@ if st.sidebar.button("Show Analysis"):
 
     else:
         st.markdown(f"### {selected_name}")
-        temp_df = df[df['donor_name'] == selected_name]
-        search_url = helper.get_search_url(selected_name)
+        temp_df = df[df['donor_name'] == selected_name].copy()
+        search_url = helper.fetch_search_url(selected_name)
         st.markdown(f'<a href="{search_url}" target="_blank">Google {selected_name}\'s activities</a>', unsafe_allow_html=True)
         user_stats = helper.fetch_user_donation_stats(selected_name, temp_df, banana)
         col1, col2 = st.columns(2)
@@ -72,9 +73,11 @@ if st.sidebar.button("Show Analysis"):
         st.write(temp_df[columns_to_display])
         helper.plot_purchase_heatmap(temp_df)
         
+        st.write('An approximate list of political parties who encashed bonds during the period of this donor\'s purchase date and the bond\'s validity period (15 days). There\'s no way to know the real benificiaries without the unique numbers -')
+        st.write(helper.fetch_bonds_encashed_by_validity_period(temp_df, encashment))
+        
     
     if selected_name == "All":
-        encashment = helper.load_data('encashment_cleaned.csv')
         st.markdown(f"## Party Stats")
         encashment_stats = helper.fetch_encashment_stats(encashment)
         redemptions = helper.redemptions_preprocess(encashment, encashment_stats.total_encashed)
@@ -103,7 +106,7 @@ st.sidebar.markdown("""---""")
 st.sidebar.markdown("""---""")
 st.sidebar.markdown("""---""")
 st.sidebar.markdown("""
-    Support an atmanirbhar devoloper today -
+    Support the developer -
     * UPI - sandman.zip@oksbi
     * [PayPal](https://paypal.me/saandman)
     * [Buy Me A Coffee](https://www.buymeacoffee.com/saandman)

@@ -15,8 +15,14 @@ import io
 def load_data(file_path):
     return pd.read_csv(file_path)
 
+def fetch_bond_validity_range(purchase_date):
+    validity_date = purchase_date + pd.Timedelta(days=15)
+    return validity_date
+
 def donor_preprocess(df):
     df['purchase_date'] = pd.to_datetime(df['purchase_date'])
+    df['validity_date'] = df['purchase_date'].apply(fetch_bond_validity_range)
+    df['validity_date'] = pd.to_datetime(df['validity_date'])
     return df
 
 def encashment_preprocess(encashment):
@@ -107,7 +113,6 @@ def fetch_user_donation_stats(selected_name, df, banana):
                            start_year=start_year, end_year=end_year)
     return user_stats
 
-
 def fetch_encashment_stats(encashment):
     num_encashments = encashment.shape[0]
     num_parties = encashment['political_party'].nunique()
@@ -131,10 +136,21 @@ def fetch_league_table(banana):
     league = league.sort_values(by='banana_rating', key=lambda x: x.astype(str).str.len())
     return league
 
-def get_search_url(selected_name):
+def fetch_search_url(selected_name):
     # search_url = f"https://www.google.com/search?q={selected_name}+(ED|IT|raid|scam|stocks|Enforcement Directorate|Income Tax)"
     search_url = f"https://www.google.com/search?q={selected_name}"
     return search_url
+
+
+def fetch_bonds_encashed_by_validity_period(temp_df, encashment):
+    filtered_encashments = encashment[
+    (encashment['encashment_date'] >= temp_df['purchase_date'].min()) & 
+    (encashment['encashment_date'] <= temp_df['validity_date'].max())
+    ]
+    encashment_count = filtered_encashments['political_party'].value_counts()
+    encashment_count = encashment_count.rename('number_of_encashments_in_period')
+
+    return encashment_count
 
 
 ################### Plots ####################
