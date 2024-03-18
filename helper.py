@@ -143,6 +143,9 @@ def fetch_search_url(selected_name):
 
 
 def fetch_bonds_encashed_by_validity_period(temp_df, encashment):
+    temp_df['purchase_date'] = pd.to_datetime(temp_df['purchase_date'])
+    temp_df['validity_date'] = pd.to_datetime(temp_df['validity_date'])
+    encashment['validity_date'] = pd.to_datetime(encashment['encashment_date'])
     filtered_encashments = encashment[
     (encashment['encashment_date'] >= temp_df['purchase_date'].min()) & 
     (encashment['encashment_date'] <= temp_df['validity_date'].max())
